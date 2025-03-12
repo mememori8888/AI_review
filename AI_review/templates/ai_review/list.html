@@ -2,9 +2,9 @@
 <ul>
 {% for review in reviews %}
 <li>
-<strong>Question:</strong> {{ review.question }}<br>
-<strong>Response:</strong> {{ review.response }}<br>
-<strong>Timestamp:</strong> {{ review.timestamp }}
+<strong>Timestamp:</strong> {{ review.timestamp }}<br>
+<strong>Question:</strong> {{ review.question|linebreaksbr }}<br>
+<strong>Response:</strong> {{ review.response|linebreaksbr }}<br>
 </li>
 {% endfor %}
 </ul>
