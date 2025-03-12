@@ -1,0 +1,10 @@
+<h1>AI Review List</h1>
+<ul>
+{% for review in reviews %}
+<li>
+<strong>Question:</strong> {{ review.question }}<br>
+<strong>Response:</strong> {{ review.response }}<br>
+<strong>Timestamp:</strong> {{ review.timestamp }}
+</li>
+{% endfor %}
+</ul>
