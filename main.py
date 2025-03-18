@@ -47,7 +47,6 @@ button_data = [
     {"label": "レシピ", "prompt": "対象のテキストを栄養の効率のいい組み合わせを取り入れて料理研究家として答えてください。日本語と英語両方用意してください。"},
     {"label": "翻訳", "prompt": "対象のテキストを日本語に翻訳してください。日本語と英語両方用意してください。"},
     {"label": "YouTube", "prompt": "対象のyoutube動画を要約してください。日本語と英語両方用意してください。"},
-
 ]
 
 # 各ボタンに対応するデータベース名
@@ -76,35 +75,104 @@ table_names = [
 
 def main(page: ft.Page):
     page.title = "AI応答アプリ"
+    page.window_width = 800
+    page.window_height = 900
+    page.padding = 20
 
-    input_text = ft.TextField(label="質問を入力してください")
-    # output_text = ft.Text()
-    output_text = ft.TextField(label="質問", read_only=False, multiline=True, expand=True)
-    ai_response = ft.TextField(label="AI応答", read_only=False, multiline=True, expand=True)
+    # 入力フィールド
+    premise_text = ft.TextField(
+        label="前提条件を入力してください",
+        multiline=True,
+        min_lines=3,
+        max_lines=5,
+        expand=True
+    )
+    question_text = ft.TextField(
+        label="質問を入力してください",
+        multiline=True,
+        min_lines=2,
+        max_lines=3,
+        expand=True
+    )
+
+    # 出力フィールド
+    output_text = ft.TextField(
+        label="入力内容",
+        read_only=True,
+        multiline=True,
+        min_lines=3,
+        max_lines=5,
+        expand=True
+    )
+    ai_response = ft.TextField(
+        label="AI応答",
+        read_only=True,
+        multiline=True,
+        min_lines=10,
+        expand=True
+    )
 
     def send_request(e):
         button_index = int(e.control.data)
-        question = input_text.value
+        premise = premise_text.value or "前提条件なし"
+        question = question_text.value
         prompt = button_data[button_index]["prompt"]
         database_name = database_names[button_index]
         table_name = table_names[button_index]
 
-        response = get_ai_response(question, prompt)
-        output_text.value = f"質問: {question}"
+        # 前提条件と質問を組み合わせる
+        combined_input = f"""
+前提条件:
+{premise}
+
+質問:
+{question}
+"""
+        response = get_ai_response(combined_input, prompt)
+        output_text.value = combined_input
         ai_response.value = response
         page.update()
-        save_to_mysql(question, response, database_name, table_name)
+        save_to_mysql(combined_input, response, database_name, table_name)
 
+    # ボタンのスタイル設定
     buttons = []
     for i, data in enumerate(button_data):
-        button = ft.ElevatedButton(text=data["label"], on_click=send_request, data=i)
+        button = ft.ElevatedButton(
+            text=data["label"],
+            on_click=send_request,
+            data=i,
+            style=ft.ButtonStyle(
+                color=ft.colors.WHITE,
+                bgcolor=ft.colors.BLUE,
+                padding=10,
+            ),
+            width=150
+        )
         buttons.append(button)
 
+    # ボタンを2行に分割
+    button_rows = [
+        ft.Row(
+            controls=buttons[:4],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=10
+        ),
+        ft.Row(
+            controls=buttons[4:],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=10
+        )
+    ]
+
     page.add(
-        input_text,
-        ft.Row(controls=buttons),
-        output_text,
-        ft.Column([ai_response], expand=True),
+        ft.Column([
+            ft.Text("AI応答アプリ", size=24, weight=ft.FontWeight.BOLD),
+            premise_text,
+            question_text,
+            *button_rows,
+            output_text,
+            ai_response
+        ], spacing=20)
     )
 
 def get_ai_response(question, prompt):

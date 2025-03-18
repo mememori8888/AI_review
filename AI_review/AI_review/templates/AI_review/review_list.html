@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">AI応答履歴 - {{ current_db_label }}</h1>
+
+    <!-- データベース選択 -->
+    <div class="mb-4">
+        <form method="get" class="form-inline">
+            <div class="form-group">
+                <label for="database" class="mr-2">データベースを選択：</label>
+                <select name="database" id="database" class="form-control" onchange="this.form.submit()">
+                    {% for db_name, db_label in databases %}
+                    <option value="{{ db_name }}" {% if db_name == selected_db %}selected{% endif %}>
+                        {{ db_label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <!-- レスポンス一覧 -->
+    <div class="list-group">
+        {% for review in page_obj %}
+        <div class="list-group-item mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">{{ review.timestamp|date:"Y/m/d H:i" }}</small>
+            </div>
+            <h5 class="mt-2 mb-2">質問：</h5>
+            <p class="mb-3" style="white-space: pre-wrap;">{{ review.question }}</p>
+            <h5 class="mb-2">回答：</h5>
+            <p style="white-space: pre-wrap;">{{ review.response }}</p>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">
+            データがありません。
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ページネーション -->
+    {% if page_obj.has_other_pages %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?database={{ selected_db }}&page={{ page_obj.previous_page_number }}">
+                    前へ
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+                <a class="page-link" href="?database={{ selected_db }}&page={{ num }}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?database={{ selected_db }}&page={{ page_obj.next_page_number }}">
+                    次へ
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

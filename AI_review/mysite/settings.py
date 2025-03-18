@@ -76,14 +76,70 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-'default': {
-'ENGINE': 'django.db.backends.mysql',
-'NAME': 'gemini_programming',  # データベース名
-'USER': 'root',  # ユーザー名
-'PASSWORD': 'mamhidet_mysql',  # パスワード
-'HOST': 'localhost',  # ホスト名 (localhostなど)
-'PORT': '3306',  # ポート番号 (通常は3306)
-}
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'gemini_programming',
+        'USER': 'root',
+        'PASSWORD': 'mamhidet_mysql',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
+    'brain_knock': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'gemini_brain_knock',
+        'USER': 'root',
+        'PASSWORD': 'mamhidet_mysql',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
+    'business': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'gemini_business_sujest',
+        'USER': 'root',
+        'PASSWORD': 'mamhidet_mysql',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
+    'parse': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'gemini_parse',
+        'USER': 'root',
+        'PASSWORD': 'mamhidet_mysql',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
+    'mail': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'gemini_mail',
+        'USER': 'root',
+        'PASSWORD': 'mamhidet_mysql',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
+    'recipe': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'gemini_recipe',
+        'USER': 'root',
+        'PASSWORD': 'mamhidet_mysql',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
+    'translation': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'gemini_translation',
+        'USER': 'root',
+        'PASSWORD': 'mamhidet_mysql',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
+    'youtube': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'gemini_youtube',
+        'USER': 'root',
+        'PASSWORD': 'mamhidet_mysql',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
 }
 
 
